@@ -22,8 +22,9 @@ class TaskController {
     public function create(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titre = trim($_POST['titre'] ?? '');
+            $description = trim($_POST['description'] ?? '');
             if (!empty($titre)) {
-                $this->taskModel->create($titre);
+                $this->taskModel->create($titre, $description);
             }
             // après création on revient à l'affichage principal
             header('Location: ' . $_SERVER['SCRIPT_NAME'] . '?action=index');
@@ -49,4 +50,15 @@ class TaskController {
         header('Location: ' . $_SERVER['SCRIPT_NAME'] . '?action=index');
         exit;
     }
+    //modifier une tache
+    public function edit(): void{
+        $id = (int)($_GET['id'] ?? 0);
+        if($id >0) {
+            $this->taskModel->update(id: $id, titre: $_POST['titre'] ?? '');
+        }
+        header('location: ' . $_SERVER['SCRIPT_NAME'] . '?action=index');
+        exit;
+        
+    }
+
 }

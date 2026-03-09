@@ -4,67 +4,47 @@
     <meta charset="UTF-8">
     <title>Ma Todo List</title>
    <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 700px;
-        margin: 40px auto;
-        background-color: #f4f4f4;
-    }
+ li{
+    display: grid;
+    /* On définit 5 colonnes : 
+       2 colonnes flexibles pour le texte (titre et description)
+       et 3 colonnes de 100px pour les boutons */
+    grid-template-columns: 1fr 1fr 100px 100px 100px; 
+    gap: 15px; 
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.1em;
+}
+/* Style pour la description afin qu'elle soit plus discrète que le titre */
+li span:nth-child(2) {
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+}
 
-    h1 {
-        text-align: center;
-    }
+/* On garde tes styles de boutons existants */
+a {
+    text-decoration: none;
+    text-align: center;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    color: black;
+    font-size: 0.85em; /* Un peu plus petit pour que ça tienne bien */
+    border-radius: 4px;
+}
 
-    ul {
-        list-style: none;
-        padding: 0;
-        background: white;
-        border: 1px solid #ddd;
-    }
+a[href*="edit"] {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+    color: #0d47a1;
+}
 
-    li {
-        display: grid;
-        grid-template-columns: 1fr 120px 120px; /* 3 colonnes invisibles */
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        font-size: 1.1em;
-    }
-
-    li:last-child {
-        border-bottom: none;
-    }
-
-    .termine {
-        text-decoration: line-through;
-        color: gray;
-    }
-
-    span {
-        padding-left: 5px;
-    }
-
-    a {
-        text-decoration: none;
-        text-align: center;
-        padding: 6px 8px;
-        border: 1px solid #ccc;
-        background-color: #eee;
-        color: black;
-        font-size: 0.9em;
-    }
-
-    a:hover {
-        background-color: #ddd;
-    }
-
-    a[href*="create"] {
-        display: inline-block;
-        margin-bottom: 15px;
-        padding: 8px 10px;
-        border: 1px solid black;
-        background: white;
-    }
+a[href*="delete"] {
+    color: #b71c1c;
+    border-color: #ffcdd2;
+}
 </style>
 </head>
 <body>
@@ -81,11 +61,14 @@
                 // ?= EST UNE ABRÉVIATION DE php echo?>">
                 
                     <?= htmlspecialchars($task['titre']) ?>
-                </span>
+                </span> 
+                <span><?= htmlspecialchars($task['description']) ?></span>
+                
                 <a href="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?action=toggle&id=<?= $task['id'] ?>">
                     <?= $task['termine'] ? 'Reprendre↩️' : 'Fait ✅' ?>
                 </a>
-                <a href="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?action=delete&id=<?= $task['id'] ?>">Supprimer 🗑️</a>
+                <a href="<?= htmlspecialchars($_SERVER['SCRIPT_NAME']) ?>?action=delete&id=<?= $task['id'] ?>">Supprimer🗑️</a>
+                <a href="<?=htmlspecialchars($_SERVER['SCRIPT_NAME'])?>?action=edit&id=<?= $task['id'] ?>">Modifier ✏️</a>
             </li>
         <?php endforeach; ?>
     </ul>

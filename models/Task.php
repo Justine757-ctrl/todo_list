@@ -13,13 +13,19 @@ class Task {
     // Récupérer toutes les tâches
     public function getAll(): array {
         $stmt = $this->db->query("SELECT * FROM tasks ORDER BY created_at DESC");
+         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  var_dump($stmt);
+
     }
     // Ajouter une tâche
-    public function create(string $titre): void {
-        $stmt = $this->db->prepare("INSERT INTO tasks (titre) VALUES (:titre)");
-        $stmt->execute([':titre' => $titre]);
-    }
+   public function create(string $titre, string $description = ''): void {
+    $stmt = $this->db->prepare("INSERT INTO tasks (titre, description) VALUES (:titre, :description)");
+    $stmt->execute([
+        ':titre'       => $titre,
+        ':description' => $description,
+    ]);
+}
     // Marquer comme terminée
     public function toggleTermine(int $id): void {
         $stmt = $this->db->prepare(
@@ -31,5 +37,14 @@ class Task {
     public function delete(int $id): void {
         $stmt = $this->db->prepare("DELETE FROM tasks WHERE id = :id");
         $stmt->execute([':id' => $id]);
+    }
+    //modifier une tache
+    public function update(int $id, string $titre, string $description = ""): void {
+        $stmt = $this->db->prepare("UPDATE tasks SET titre = :titre, description = :description WHERE id = :id");
+        $stmt->execute([
+            ':id' => $id, 
+            ':titre' => $titre,
+            ':description' => $description
+        ]);
     }
 }
